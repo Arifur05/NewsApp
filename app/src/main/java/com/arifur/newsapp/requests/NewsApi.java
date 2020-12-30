@@ -2,11 +2,9 @@ package com.arifur.newsapp.requests;
 
 import androidx.lifecycle.LiveData;
 
-import com.arifur.newsapp.model.NewsDataModel;
+import com.arifur.newsapp.requests.response.NewsResponse;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -18,8 +16,8 @@ import retrofit2.http.Query;
  **/
 public interface NewsApi {
 
-    @GET("")
-    LiveData<NewsDataModel> getWorldNews(
+    @GET("top-headlines")
+    LiveData<NewsResponse> getWorldNews(
             @Query("apikey") String api,
             @Query("q") String query,
             @Query("language") String language
