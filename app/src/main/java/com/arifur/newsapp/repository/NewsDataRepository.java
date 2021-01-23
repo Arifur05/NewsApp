@@ -34,4 +34,8 @@ public class NewsDataRepository {
         return mApiClient.getArticles();
     }
 
+    public void getAllNews(String sources){
+        mApiClient.getWorldNewsApi(sources);
+
+    }
 }

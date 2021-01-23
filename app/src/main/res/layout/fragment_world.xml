@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+        >
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -19,7 +19,8 @@
             tools:listitem="@layout/card_example1"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:layout_marginLeft="6dp"
             />
 
         <androidx.recyclerview.widget.RecyclerView

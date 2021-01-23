@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="360dp"
-    android:layout_height="150dp"
-    android:layout_margin="8dp">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="320dp"
+        android:layout_height="180dp"
+        android:layout_margin="8dp">
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/markus"
-            />
+            android:id="@+id/article_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/markus" />
+
         <TextView
+            android:id="@+id/article_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Header"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="16dp"
-            android:padding="2dp"/>
+            android:padding="2dp"
+            android:text="Header"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
     </FrameLayout>
 
 </androidx.cardview.widget.CardView>

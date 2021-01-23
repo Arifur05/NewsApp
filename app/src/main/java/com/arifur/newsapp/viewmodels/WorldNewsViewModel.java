@@ -21,7 +21,7 @@ public class WorldNewsViewModel extends ViewModel {
 
 
     private NewsDataRepository mNewsDataRepository;
-    private NewsApiClient mNewsApiClient;
+    //private NewsApiClient mNewsApiClient;
 
     public WorldNewsViewModel() {
         mNewsDataRepository = NewsDataRepository.getInstance();
@@ -30,5 +30,9 @@ public class WorldNewsViewModel extends ViewModel {
 
     public LiveData<List<Article>> getWorldNewsArticle(){
         return mNewsDataRepository.getArticles();
+    }
+    public void getAllNews(String sources){
+        mNewsDataRepository.getAllNews(sources);
+
     }
 }

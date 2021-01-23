@@ -39,8 +39,8 @@ public class ServiceGenerator {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create());
     private static Retrofit sRetrofit=retrofitBuilder.build();
-    private NewsApi mNewsApi= sRetrofit.create(NewsApi.class);
-    private NewsApi getNewsApi(){
+    private static NewsApi mNewsApi= sRetrofit.create(NewsApi.class);
+    public static NewsApi getNewsApi(){
         return mNewsApi;
     }
 }

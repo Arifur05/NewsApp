@@ -4,6 +4,8 @@ import com.arifur.newsapp.model.Article;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * @author : Arif
  * @date : 31-December-2020 02:09 AM
@@ -22,7 +24,7 @@ public class NewsResponse {
 
     @SerializedName("articles")
     @Expose
-    private Article article;
+    private List<Article> article;
 
     public String getStatus() {
         return status;
@@ -32,7 +34,7 @@ public class NewsResponse {
         return totalResults;
     }
 
-    public Article getArticle() {
+    public List<Article> getArticle() {
         return article;
     }
 
