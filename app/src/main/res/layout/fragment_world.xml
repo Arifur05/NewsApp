@@ -16,7 +16,7 @@
             android:id="@+id/world_top_headlines_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/card_example1"
+            tools:listitem="@layout/headline_card"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginRight="6dp"
@@ -24,13 +24,11 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/important_rv"
-            android:layout_width="match_parent"
+            android:id="@+id/allnews_rv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/card_example2"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_centerVertical="true"
+            tools:listitem="@layout/all_news_card"
+            android:layout_margin="6dp"
             />
     </LinearLayout>
 </FrameLayout>

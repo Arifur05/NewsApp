@@ -34,8 +34,15 @@ public class NewsDataRepository {
         return mApiClient.getArticles();
     }
 
-    public void getAllNews(String sources){
+    public LiveData<List<Article>> getAllNews(){
+        return mApiClient.getAllArticles();
+    }
+
+    public void getNewsHeadlines(String sources){
         mApiClient.getWorldNewsApi(sources);
 
+    }
+    public void getAllNewsArticle(){
+        mApiClient.getAllNewsApi();
     }
 }

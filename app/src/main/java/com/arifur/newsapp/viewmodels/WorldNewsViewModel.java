@@ -20,7 +20,7 @@ import java.util.List;
 public class WorldNewsViewModel extends ViewModel {
 
 
-    private NewsDataRepository mNewsDataRepository;
+    private final NewsDataRepository mNewsDataRepository;
     //private NewsApiClient mNewsApiClient;
 
     public WorldNewsViewModel() {
@@ -28,11 +28,18 @@ public class WorldNewsViewModel extends ViewModel {
     }
 
 
-    public LiveData<List<Article>> getWorldNewsArticle(){
+    public LiveData<List<Article>> getWorldNewsHeadlinesArticle(){
         return mNewsDataRepository.getArticles();
     }
-    public void getAllNews(String sources){
-        mNewsDataRepository.getAllNews(sources);
+    public LiveData<List<Article>> getAllNewsArticle(){
+        return mNewsDataRepository.getAllNews();
+    }
+    public void getNewsHeadlines(String sources){
+        mNewsDataRepository.getNewsHeadlines(sources);
+
+    }
+    public void getAllNews(){
+        mNewsDataRepository.getAllNewsArticle();
 
     }
 }

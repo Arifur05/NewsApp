@@ -23,4 +23,11 @@ public interface NewsApi {
             @Query("language") String language,
             @Query("sources") String sources
     );
+
+    @GET("top-headlines")
+    Call<NewsResponse> getAllNews(
+            @Query("apikey") String api,
+            @Query("language") String language,
+            @Query("pageSize") int pageSize
+    );
 }
