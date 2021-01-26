@@ -1,6 +1,7 @@
 package com.arifur.newsapp.views;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.arifur.newsapp.R;
 import com.arifur.newsapp.adapters.AllNewsAdapter;
+import com.arifur.newsapp.adapters.OnNewsListener;
 import com.arifur.newsapp.adapters.WorldNewsHeadlinesAdapter;
 import com.arifur.newsapp.model.Article;
 import com.arifur.newsapp.requests.NewsApi;
@@ -32,7 +34,7 @@ import retrofit2.Response;
 
 import static com.arifur.newsapp.util.Constants.API_KEY;
 
-public class WorldFragment extends Fragment {
+public class WorldFragment extends Fragment implements OnNewsListener {
     private static final String TAG = "WorldFragment";
     private WorldNewsViewModel mWorldNewsViewModel;
     private RecyclerView mTopHeadlinesRV, mAllNewsRV;
@@ -59,8 +61,7 @@ public class WorldFragment extends Fragment {
                 if (articles != null) {
                     for (Article article : articles) {
                         Log.d(TAG, "onChanged: " + article.getTitle());
-                        mWorldNewsHeadlinesAdapter = new WorldNewsHeadlinesAdapter(articles);
-                        mTopHeadlinesRV.setAdapter(mWorldNewsHeadlinesAdapter);
+                        mWorldNewsHeadlinesAdapter.setArticle(articles);
                     }
                 } else {
                     Log.d("Main", "onChanged: articles Null" + articles);
@@ -74,8 +75,7 @@ public class WorldFragment extends Fragment {
                 if (allarticles != null) {
                     for (Article articles : allarticles) {
                         Log.d(TAG, "All News: " + articles.getTitle());
-                        mAllNewsAdapter = new AllNewsAdapter(getContext(), allarticles);
-                        mAllNewsRV.setAdapter(mAllNewsAdapter);
+                        mAllNewsAdapter.setArticle(allarticles);
                     }
                 } else {
                     Log.d("Main", "onChanged: articles Null" + allarticles);
@@ -103,7 +103,10 @@ public class WorldFragment extends Fragment {
 
 
     public void initRecyclerView() {
-
+        mWorldNewsHeadlinesAdapter= new WorldNewsHeadlinesAdapter(this);
+        mTopHeadlinesRV.setAdapter(mWorldNewsHeadlinesAdapter);
+        mAllNewsAdapter= new AllNewsAdapter(this);
+        mAllNewsRV.setAdapter(mAllNewsAdapter);
         mTopHeadlinesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mAllNewsRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
     }
@@ -129,4 +132,14 @@ public class WorldFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onNewsClick(int position) {
+        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
+        intent.putExtra("headline",mWorldNewsHeadlinesAdapter.getSelectedArticle(position));
+        intent.putExtra("article" ,mAllNewsAdapter.getSelectedArticle(position));
+        startActivity(intent);
+    }
+
+
 }

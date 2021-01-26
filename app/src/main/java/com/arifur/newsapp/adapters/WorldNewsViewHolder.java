@@ -19,8 +19,10 @@ import com.arifur.newsapp.R;
 public class WorldNewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     TextView mArticleTitleTV;
     AppCompatImageView mArticleImage;
-    public WorldNewsViewHolder(@NonNull View itemView) {
+    OnNewsListener mOnNewsListener;
+    public WorldNewsViewHolder(@NonNull View itemView,OnNewsListener mOnNewsListener) {
         super(itemView);
+        this.mOnNewsListener= mOnNewsListener;
         mArticleTitleTV= itemView.findViewById(R.id.article_title);
         mArticleImage= itemView.findViewById(R.id.article_image);
 
@@ -29,6 +31,6 @@ public class WorldNewsViewHolder extends RecyclerView.ViewHolder implements View
 
     @Override
     public void onClick(View view) {
-
+        mOnNewsListener.onNewsClick(getAdapterPosition());
     }
 }

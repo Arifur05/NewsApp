@@ -23,45 +23,53 @@ import java.util.List;
  * -------------------------------------------
  * Copyright (C) 2021 - All Rights Reserved
  **/
-public class AllNewsAdapter extends RecyclerView.Adapter<AllNewsAdapter.AllNewsViewHolder> {
+public class AllNewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private List<Article> mArticles;
+    private OnNewsListener mOnNewsListener;
 
-    public AllNewsAdapter(Context context, List<Article> articles) {
-        mContext = context;
-        mArticles = articles;
+    public AllNewsAdapter(OnNewsListener onNewsListener) {
+        mOnNewsListener = onNewsListener;
     }
+
 
     @NonNull
     @Override
-    public AllNewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.all_news_card,parent,false);
-        return new AllNewsViewHolder(view);
+        return new AllNewsViewHolder(view,mOnNewsListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AllNewsViewHolder holder, int position) {
-        holder.mTitle.setText(mArticles.get(position).getTitle());
-        holder.mDescription.setText(mArticles.get(position).getDescription());
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ((AllNewsViewHolder) holder).mTitle.setText(mArticles.get(position).getTitle());
+        ((AllNewsViewHolder) holder).mDescription.setText(mArticles.get(position).getDescription());
+
         Glide.with(((AllNewsViewHolder)holder).mAppCompatImageView)
                 .load(mArticles.get(position).getUrlToImage())
                 .into(((AllNewsViewHolder)holder).mAppCompatImageView);
-
     }
+
+
 
     @Override
     public int getItemCount() {
-        return mArticles.size();
+        if (mArticles!=null){
+            return mArticles.size();
+        }
+        return 0;
+    }
+    public void setArticle(List<Article> articleList){
+        mArticles = articleList;
+        notifyDataSetChanged();
     }
 
-    public class AllNewsViewHolder extends RecyclerView.ViewHolder{
-        AppCompatImageView mAppCompatImageView;
-        TextView mTitle, mDescription;
-        public AllNewsViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mAppCompatImageView= itemView.findViewById(R.id.article_image);
-            mTitle= itemView.findViewById(R.id.article_title);
-            mDescription= itemView.findViewById(R.id.article_description);
+    public Article getSelectedArticle(int position){
+        if(mArticles != null){
+            if(mArticles.size()> 0){
+                return mArticles.get(position);
+            }
         }
+        return null;
     }
 }

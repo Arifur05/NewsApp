@@ -9,4 +9,5 @@ package com.arifur.newsapp.adapters;
  **/
 public interface OnNewsListener {
     void onNewsClick(int position);
+
 }
