@@ -27,6 +27,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
         getIncomingIntent();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void initViews(){
         mImage = findViewById(R.id.article_image);
         mTitle= findViewById(R.id.article_title);
