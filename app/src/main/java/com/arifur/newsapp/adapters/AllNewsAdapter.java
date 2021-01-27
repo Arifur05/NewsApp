@@ -14,6 +14,7 @@ import com.arifur.newsapp.R;
 import com.arifur.newsapp.model.Article;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,12 +25,12 @@ import java.util.List;
  * Copyright (C) 2021 - All Rights Reserved
  **/
 public class AllNewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
     private List<Article> mArticles;
     private OnNewsListener mOnNewsListener;
 
     public AllNewsAdapter(OnNewsListener onNewsListener) {
         mOnNewsListener = onNewsListener;
+        mArticles= new ArrayList<>();
     }
 
 

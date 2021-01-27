@@ -20,6 +20,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginRight="6dp"
+            
             android:layout_marginLeft="6dp"
             />
 

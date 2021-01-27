@@ -61,7 +61,8 @@ public class WorldFragment extends Fragment implements OnNewsListener {
                 if (articles != null) {
                     for (Article article : articles) {
                         Log.d(TAG, "onChanged: " + article.getTitle());
-                        mWorldNewsHeadlinesAdapter.setArticle(articles);
+                        mWorldNewsHeadlinesAdapter= new WorldNewsHeadlinesAdapter(articles);
+                        mTopHeadlinesRV.setAdapter(mWorldNewsHeadlinesAdapter);
                     }
                 } else {
                     Log.d("Main", "onChanged: articles Null" + articles);
@@ -103,8 +104,8 @@ public class WorldFragment extends Fragment implements OnNewsListener {
 
 
     public void initRecyclerView() {
-        mWorldNewsHeadlinesAdapter= new WorldNewsHeadlinesAdapter(this);
-        mTopHeadlinesRV.setAdapter(mWorldNewsHeadlinesAdapter);
+
+
         mAllNewsAdapter= new AllNewsAdapter(this);
         mAllNewsRV.setAdapter(mAllNewsAdapter);
         mTopHeadlinesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -136,10 +137,12 @@ public class WorldFragment extends Fragment implements OnNewsListener {
     @Override
     public void onNewsClick(int position) {
         Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
-        intent.putExtra("headline",mWorldNewsHeadlinesAdapter.getSelectedArticle(position));
+        //intent.putExtra("headline",mWorldNewsHeadlinesAdapter.getSelectedArticle(position));
         intent.putExtra("article" ,mAllNewsAdapter.getSelectedArticle(position));
         startActivity(intent);
     }
+
+
 
 
 }

@@ -20,6 +20,7 @@ public class AllNewsViewHolder extends RecyclerView.ViewHolder implements View.O
     AppCompatImageView mAppCompatImageView;
     TextView mTitle, mDescription;
     OnNewsListener mOnNewsListener;
+    Boolean isAllnewsItemClick= false;
     public AllNewsViewHolder(@NonNull View itemView,OnNewsListener mOnNewsListener) {
         super(itemView);
         this.mOnNewsListener=mOnNewsListener;
@@ -32,6 +33,6 @@ public class AllNewsViewHolder extends RecyclerView.ViewHolder implements View.O
     @Override
     public void onClick(View view) {
             mOnNewsListener.onNewsClick(getAdapterPosition());
-
+            isAllnewsItemClick= true;
     }
 }

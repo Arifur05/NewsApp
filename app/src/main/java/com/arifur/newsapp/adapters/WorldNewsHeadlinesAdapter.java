@@ -24,27 +24,27 @@ import java.util.List;
  * -------------------------------------------
  * Copyright (C) 2021 - All Rights Reserved
  **/
-public class WorldNewsHeadlinesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class WorldNewsHeadlinesAdapter extends RecyclerView.Adapter<WorldNewsHeadlinesAdapter.WorldNewsViewHolder>{
     private static final int TOP_HEADLINES = 1;
     private static final int ALL_NEWS = 2;
     private List<Article> mArticles;
     private OnNewsListener mOnNewsListener;
 
-    public WorldNewsHeadlinesAdapter(OnNewsListener onNewsListener) {
-        mOnNewsListener = onNewsListener;
+    public WorldNewsHeadlinesAdapter(List<Article> articles) {
+        mArticles = articles;
     }
 
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public WorldNewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.headline_card,parent,false);
 
-        return new WorldNewsViewHolder(view,mOnNewsListener);
+        return new WorldNewsViewHolder(view, mOnNewsListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WorldNewsViewHolder holder, int position) {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .error(R.drawable.ic_launcher_background);
@@ -54,9 +54,6 @@ public class WorldNewsHeadlinesAdapter extends RecyclerView.Adapter<RecyclerView
                 .load(mArticles.get(position).getUrlToImage())
                 .into(((WorldNewsViewHolder)holder).mArticleImage);
     }
-
-
-
 
     @Override
     public int getItemCount() {
@@ -68,17 +65,18 @@ public class WorldNewsHeadlinesAdapter extends RecyclerView.Adapter<RecyclerView
 
 
 
-    public void setArticle(List<Article> articleList){
-        mArticles = articleList;
-        notifyDataSetChanged();
-    }
+    public static class WorldNewsViewHolder extends RecyclerView.ViewHolder {
+        TextView mArticleTitleTV;
+        AppCompatImageView mArticleImage;
+        OnNewsListener mOnNewsListener;
 
-    public Article getSelectedArticle(int position){
-        if(mArticles != null){
-            if(mArticles.size()> 0){
-                return mArticles.get(position);
-            }
+        public WorldNewsViewHolder(@NonNull View itemView, OnNewsListener mOnNewsListener) {
+            super(itemView);
+            this.mOnNewsListener = mOnNewsListener;
+            mArticleTitleTV = itemView.findViewById(R.id.article_title);
+            mArticleImage = itemView.findViewById(R.id.article_image);
+
+
         }
-        return null;
     }
 }
