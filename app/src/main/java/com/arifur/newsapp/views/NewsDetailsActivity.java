@@ -6,6 +6,9 @@ import androidx.appcompat.widget.AppCompatImageView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.arifur.newsapp.R;
@@ -15,16 +18,27 @@ import com.bumptech.glide.Glide;
 public class NewsDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "NewsDetailsActivity";
-    Article mArticle;
-    TextView mTitle, mContent;
-    AppCompatImageView mImage;
+
+    private Article mArticle;
+    private WebView superSafeWebView;
+    private boolean safeBrowsingIsInitialized;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
-        initViews();
+        superSafeWebView = (WebView) findViewById(R.id.webview);
+
+
         getIncomingIntent();
+        WebSettings webSettings = superSafeWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        WebViewClient webViewClient = new WebViewClientImpl(this);
+        superSafeWebView.setWebViewClient(webViewClient);
+
+        superSafeWebView.loadUrl(mArticle.getUrl());
     }
 
     @Override
@@ -32,19 +46,12 @@ public class NewsDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void initViews(){
-        mImage = findViewById(R.id.article_image);
-        mTitle= findViewById(R.id.article_title);
-        mContent= findViewById(R.id.article_content);
-    }
     private void getIncomingIntent() {
         if (getIntent().hasExtra("article")) {
             mArticle = getIntent().getParcelableExtra("article");
             Log.d(TAG, "getIncomingIntent: " + mArticle.getTitle());
-            Log.d(TAG, "getIncomingContent: "+mArticle.getContent());
-            Glide.with(mImage).load(mArticle.getUrlToImage()).into(mImage);
-            mTitle.setText(mArticle.getTitle());
-            mContent.setText(mArticle.getContent());
+            Log.d(TAG, "getIncomingContent: " + mArticle.getContent());
+
         }
     }
 }

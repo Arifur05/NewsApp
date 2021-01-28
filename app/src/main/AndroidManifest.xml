@@ -21,7 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.NewsDetailsActivity"
-            android:theme="@style/Theme.NewsApp.NoActionBar"/>
+            android:theme="@style/Theme.NewsApp.NoActionBar">
+        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="false" />
+        </activity>
     </application>
 
 </manifest>
