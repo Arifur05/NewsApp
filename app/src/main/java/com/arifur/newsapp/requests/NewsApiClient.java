@@ -32,8 +32,10 @@ public class NewsApiClient {
     private static NewsApiClient instance;
     private final MutableLiveData<List<Article>> mArticle;
     private final MutableLiveData<List<Article>> mAllNewsArticle;
+    private final MutableLiveData<List<Article>> mQueriedNewsArticle;
     private RetriveWorldNewsRunnable mRetriveWorldNewsRunnable;
     private RetriveAllNewsRunnable mRetriveAllNewsRunnable;
+    private RetriveQueriedNewsRunnable mRetriveQueriedNewsRunnable;
 
     public static NewsApiClient getInstance() {
         if (instance == null) {
@@ -45,8 +47,12 @@ public class NewsApiClient {
     private NewsApiClient() {
         mArticle = new MutableLiveData<>();
         mAllNewsArticle= new MutableLiveData<>();
+        mQueriedNewsArticle= new MutableLiveData<>();
     }
 
+    public MutableLiveData<List<Article>> getQuriedNewsArticle(String q){
+        return mQueriedNewsArticle;
+    }
     public MutableLiveData<List<Article>> getArticles() {
         return mArticle;
     }
@@ -75,6 +81,21 @@ public class NewsApiClient {
         }
         mRetriveAllNewsRunnable = new RetriveAllNewsRunnable();
         final Future handlers = AppExecutors.getInstance().getNewtworkIO().submit(mRetriveAllNewsRunnable);
+        AppExecutors.getInstance().getNewtworkIO().schedule(new Runnable() {
+            @Override
+            public void run() {
+                handlers.cancel(true);
+
+            }
+        }, 10000, TimeUnit.MILLISECONDS);
+    }
+
+    public void getQueriedArticles(String q) {
+        if (mRetriveQueriedNewsRunnable != null) {
+            mRetriveQueriedNewsRunnable = null;
+        }
+        mRetriveQueriedNewsRunnable = new RetriveQueriedNewsRunnable(q);
+        final Future handlers = AppExecutors.getInstance().getNewtworkIO().submit(mRetriveQueriedNewsRunnable);
         AppExecutors.getInstance().getNewtworkIO().schedule(new Runnable() {
             @Override
             public void run() {
@@ -146,6 +167,40 @@ public class NewsApiClient {
 
         private Call<NewsResponse> getAllNews() {
             return ServiceGenerator.getNewsApi().getAllNews(API_KEY,"en",100);
+        }
+    }
+
+    private class RetriveQueriedNewsRunnable implements Runnable {
+
+        String q;
+
+        public RetriveQueriedNewsRunnable(String q) {
+            this.q = q;
+        }
+
+
+        @Override
+        public void run() {
+            try {
+                Response<NewsResponse> response = getQueryResponse(q).execute();
+                if (response.code()==200 & response.body()!=null){
+                    List<Article> allarticleslist = new ArrayList<Article>
+                            (response.body().getArticle());
+                    mAllNewsArticle.postValue(allarticleslist);
+                    for (Article article: allarticleslist) {
+                        Log.d(TAG, "run: queried" + article);
+                    }
+                }
+                else {
+                    Log.d(TAG, "run1: "+response.message());
+                }
+            } catch (IOException e) {
+                Log.d(TAG, "run: "+e.getMessage());
+            }
+        }
+
+        private Call<NewsResponse> getQueryResponse(String q) {
+            return ServiceGenerator.getNewsApi().getQueryNews(API_KEY,"en",q,100);
         }
     }
 }

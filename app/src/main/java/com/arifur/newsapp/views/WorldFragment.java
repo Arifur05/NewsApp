@@ -24,7 +24,7 @@ import com.arifur.newsapp.model.Article;
 import com.arifur.newsapp.requests.NewsApi;
 import com.arifur.newsapp.requests.ServiceGenerator;
 import com.arifur.newsapp.requests.response.NewsResponse;
-import com.arifur.newsapp.viewmodels.WorldNewsViewModel;
+import com.arifur.newsapp.viewmodels.NewsViewModel;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ import static com.arifur.newsapp.util.Constants.API_KEY;
 
 public class WorldFragment extends Fragment implements OnNewsListener {
     private static final String TAG = "WorldFragment";
-    private WorldNewsViewModel mWorldNewsViewModel;
+    private NewsViewModel mNewsViewModel;
     private RecyclerView mTopHeadlinesRV, mAllNewsRV;
     private WorldNewsHeadlinesAdapter mWorldNewsHeadlinesAdapter;
     private AllNewsAdapter mAllNewsAdapter;
@@ -44,7 +44,7 @@ public class WorldFragment extends Fragment implements OnNewsListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mWorldNewsViewModel = new ViewModelProvider(this).get(WorldNewsViewModel.class);
+        mNewsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
 
 
         subscribeObservers();
@@ -55,7 +55,7 @@ public class WorldFragment extends Fragment implements OnNewsListener {
     }
 
     private void subscribeObservers() {
-        mWorldNewsViewModel.getWorldNewsHeadlinesArticle().observe(this, new Observer<List<Article>>() {
+        mNewsViewModel.getWorldNewsHeadlinesArticle().observe(this, new Observer<List<Article>>() {
             @Override
             public void onChanged(List<Article> articles) {
                 if (articles != null) {
@@ -70,7 +70,7 @@ public class WorldFragment extends Fragment implements OnNewsListener {
             }
         });
 
-        mWorldNewsViewModel.getAllNewsArticle().observe(this, new Observer<List<Article>>() {
+        mNewsViewModel.getAllNewsArticle().observe(this, new Observer<List<Article>>() {
             @Override
             public void onChanged(List<Article> allarticles) {
                 if (allarticles != null) {
@@ -97,8 +97,8 @@ public class WorldFragment extends Fragment implements OnNewsListener {
     }
 
     public void getTopHeadlines() {
-        mWorldNewsViewModel.getNewsHeadlines("bbc-news, cnn,abc-news");
-        mWorldNewsViewModel.getAllNews();
+        mNewsViewModel.getNewsHeadlines("bbc-news, cnn,abc-news");
+        mNewsViewModel.getAllNews();
 
     }
 

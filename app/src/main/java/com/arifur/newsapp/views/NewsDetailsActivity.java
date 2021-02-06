@@ -21,7 +21,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     private Article mArticle;
     private WebView superSafeWebView;
-    private boolean safeBrowsingIsInitialized;
+
 
 
     @Override
@@ -35,7 +35,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         WebSettings webSettings = superSafeWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        WebViewClient webViewClient = new WebViewClientImpl(this);
+        WebViewClient webViewClient = new WebViewClient();
         superSafeWebView.setWebViewClient(webViewClient);
 
         superSafeWebView.loadUrl(mArticle.getUrl());

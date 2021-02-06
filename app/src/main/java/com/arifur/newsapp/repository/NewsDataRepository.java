@@ -38,11 +38,19 @@ public class NewsDataRepository {
         return mApiClient.getAllArticles();
     }
 
+    public LiveData<List<Article>> getQueriedNews(String q){
+        return mApiClient.getQuriedNewsArticle(q);
+    }
+
     public void getNewsHeadlines(String sources){
         mApiClient.getWorldNewsApi(sources);
 
     }
     public void getAllNewsArticle(){
         mApiClient.getAllNewsApi();
+    }
+
+    public void getQueriedArticles(String q){
+        mApiClient.getQueriedArticles(q);
     }
 }

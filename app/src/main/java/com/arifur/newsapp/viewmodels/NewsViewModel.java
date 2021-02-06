@@ -17,13 +17,13 @@ import java.util.List;
  * -------------------------------------------
  * Copyright (C) 2020 - All Rights Reserved
  **/
-public class WorldNewsViewModel extends ViewModel {
+public class NewsViewModel extends ViewModel {
 
 
     private final NewsDataRepository mNewsDataRepository;
     //private NewsApiClient mNewsApiClient;
 
-    public WorldNewsViewModel() {
+    public NewsViewModel() {
         mNewsDataRepository = NewsDataRepository.getInstance();
     }
 
@@ -34,6 +34,10 @@ public class WorldNewsViewModel extends ViewModel {
     public LiveData<List<Article>> getAllNewsArticle(){
         return mNewsDataRepository.getAllNews();
     }
+
+    public LiveData<List<Article>> getQureiedNewsArticles(String q){
+        return mNewsDataRepository.getQueriedNews(q);
+    }
     public void getNewsHeadlines(String sources){
         mNewsDataRepository.getNewsHeadlines(sources);
 
@@ -41,5 +45,8 @@ public class WorldNewsViewModel extends ViewModel {
     public void getAllNews(){
         mNewsDataRepository.getAllNewsArticle();
 
+    }
+    public void getQueriedArticles(String q){
+        mNewsDataRepository.getQueriedArticles(q);
     }
 }

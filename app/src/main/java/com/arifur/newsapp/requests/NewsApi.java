@@ -30,4 +30,12 @@ public interface NewsApi {
             @Query("language") String language,
             @Query("pageSize") int pageSize
     );
+
+    @GET("everything")
+    Call<NewsResponse> getQueryNews(
+            @Query("apikey") String api,
+            @Query("language") String language,
+            @Query("q") String query,
+            @Query("pageSize") int pageSize
+    );
 }
