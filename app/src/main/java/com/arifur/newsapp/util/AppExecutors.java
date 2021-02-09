@@ -1,7 +1,11 @@
 package com.arifur.newsapp.util;
 
+import android.os.Handler;
+import android.os.Looper;
+
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+
 
 /**
  * @author : Arif
@@ -12,17 +16,35 @@ import java.util.concurrent.ScheduledExecutorService;
  **/
 public class AppExecutors {
     private static AppExecutors instance;
+
     //private MutableLiveData<List<Article>> mArticle;
-    public static AppExecutors getInstance(){
-        if (instance== null){
-            instance= new AppExecutors();
+    public static AppExecutors getInstance() {
+        if (instance == null) {
+            instance = new AppExecutors();
         }
         return instance;
     }
 
-    private final ScheduledExecutorService mNewtworkIO=
-            Executors.newScheduledThreadPool(5);
-    public ScheduledExecutorService getNewtworkIO(){
-        return mNewtworkIO;
+    private final Executor mDiskIO= Executors.newCachedThreadPool();
+
+    private final Executor mMainThreadExecutor= new MainThreadExecutor();
+
+    public Executor diskIO(){
+        return mDiskIO;
     }
+
+    public Executor mainThread(){
+        return mMainThreadExecutor;
+    }
+
+    private static class MainThreadExecutor implements Executor{
+        private Handler mainThreadHandler= new Handler(Looper.getMainLooper());
+
+        @Override
+        public void execute(Runnable runnable) {
+            mainThreadHandler.post(runnable);
+        }
+    }
+
+
 }
