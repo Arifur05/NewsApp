@@ -5,21 +5,39 @@ package com.arifur.newsapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
+import com.google.gson.annotations.Expose;
+
+@Entity(tableName = "news")
 public class Article implements Parcelable {
 
-    private Source source;
+    @PrimaryKey(autoGenerate = true)
+    @Expose(serialize = false, deserialize = false)
+    public int id;
+    @ColumnInfo(name = "author")
     private String author;
+    @ColumnInfo(name = "title")
     private String title;
+    @ColumnInfo(name = "description")
     private String description;
+    @ColumnInfo(name = "url")
     private String url;
+    @Embedded(prefix = "source_")
+    private Source source;
+    @ColumnInfo(name = "urlToImage")
     private String urlToImage;
+    @ColumnInfo(name = "publishedAt")
     private String publishedAt;
+    @ColumnInfo(name = "content")
     private String content;
 
     protected Article(Parcel in) {
+        id = in.readInt();
         author = in.readString();
         title = in.readString();
         description = in.readString();

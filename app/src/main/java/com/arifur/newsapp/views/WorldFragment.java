@@ -50,7 +50,7 @@ public class WorldFragment extends Fragment implements OnNewsListener {
         subscribeObservers();
         getTopHeadlines();
 
-        //testApiCall();
+        testApiCall();
 
     }
 
@@ -121,7 +121,7 @@ public class WorldFragment extends Fragment implements OnNewsListener {
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
                 if (response.isSuccessful()) {
                     NewsResponse responses = response.body();
-                    Log.d(TAG, "onResponse: " + responses);
+                    Log.d(TAG, "onResponse: " + responses.getArticle().get(1).getSource().getId());
                 } else {
                     Log.d(TAG, "onResponse: " + response.errorBody());
                 }
