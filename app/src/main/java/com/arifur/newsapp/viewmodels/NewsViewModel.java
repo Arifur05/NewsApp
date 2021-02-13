@@ -1,12 +1,18 @@
 package com.arifur.newsapp.viewmodels;
 
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.arifur.newsapp.model.Article;
 import com.arifur.newsapp.repository.NewsDataRepository;
-import com.arifur.newsapp.requests.NewsApiClient;
+import com.arifur.newsapp.util.Resource;
 
 import java.util.List;
 
@@ -17,36 +23,48 @@ import java.util.List;
  * -------------------------------------------
  * Copyright (C) 2020 - All Rights Reserved
  **/
-public class NewsViewModel extends ViewModel {
+public class NewsViewModel extends AndroidViewModel {
+    private static final String TAG = "NewsViewModel";
 
+    private NewsDataRepository mNewsDataRepository;
 
-    private final NewsDataRepository mNewsDataRepository;
-    //private NewsApiClient mNewsApiClient;
+    private MediatorLiveData<Resource<List<Article>>> articles = new MediatorLiveData<>();
 
-    public NewsViewModel() {
-        mNewsDataRepository = NewsDataRepository.getInstance();
+    public NewsViewModel(Application application) {
+        super(application);
+        mNewsDataRepository = NewsDataRepository.getInstance(application);
     }
 
 
-    public LiveData<List<Article>> getWorldNewsHeadlinesArticle(){
-        return mNewsDataRepository.getArticles();
-    }
-    public LiveData<List<Article>> getAllNewsArticle(){
-        return mNewsDataRepository.getAllNews();
+    public LiveData<Resource<List<Article>>> getWorldNewsHeadlinesArticle() {
+        return articles;
     }
 
-    public LiveData<List<Article>> getQureiedNewsArticles(String q){
-        return mNewsDataRepository.getQueriedNews(q);
+    public LiveData<List<Article>> getAllNewsArticle() {
+        return null;
     }
-    public void getNewsHeadlines(String sources){
-        mNewsDataRepository.getNewsHeadlines(sources);
+
+    public LiveData<List<Article>> getQureiedNewsArticles(String q) {
+        return null;
+    }
+
+    public void getNewsHeadlines() {
+        final LiveData<Resource<List<Article>>> headlinesResource = mNewsDataRepository.getHeadlinesApi();
+        articles.addSource(headlinesResource, new Observer<Resource<List<Article>>>() {
+            @Override
+            public void onChanged(Resource<List<Article>> listResource) {
+                articles.setValue(listResource);
+            }
+        });
 
     }
-    public void getAllNews(){
-        mNewsDataRepository.getAllNewsArticle();
+
+    public void getAllNews() {
+
 
     }
-    public void getQueriedArticles(String q){
-        mNewsDataRepository.getQueriedArticles(q);
+
+    public void getQueriedArticles(String q) {
+
     }
 }

@@ -41,7 +41,7 @@ public class BusinessFragment extends Fragment {
 
         subscribeObservers();
         getQueriedArticles(q);
-        testApiCall();
+        //testApiCall();
     }
 
     @Override
@@ -67,30 +67,7 @@ public class BusinessFragment extends Fragment {
             }
         });
     }
-    public void testApiCall() {
-        NewsApi newsApi = ServiceGenerator.getNewsApi();
-        Call<NewsResponse> newsResponseCall = newsApi.getQueryNews(API_KEY, "en", "business", 100);
-        newsResponseCall.enqueue(new Callback<NewsResponse>() {
-            @Override
-            public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                if (response.isSuccessful()) {
-                    for (int i =0; i<+100; i++) {
-                        Log.d(TAG, "onChanged: Business" + response.body().getArticle().get(i));
 
-                    }
-                    NewsResponse responses = response.body();
-                    Log.d(TAG, "onResponse: " + responses);
-                } else {
-                    Log.d(TAG, "onResponse: " + response.errorBody());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<NewsResponse> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
-    }
     public void getQueriedArticles(String q) {
         mNewsViewModel.getQueriedArticles(q);
 

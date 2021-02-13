@@ -24,6 +24,7 @@ import com.arifur.newsapp.model.Article;
 import com.arifur.newsapp.requests.NewsApi;
 import com.arifur.newsapp.requests.ServiceGenerator;
 import com.arifur.newsapp.requests.response.NewsResponse;
+import com.arifur.newsapp.util.Resource;
 import com.arifur.newsapp.viewmodels.NewsViewModel;
 
 import java.util.List;
@@ -50,36 +51,19 @@ public class WorldFragment extends Fragment implements OnNewsListener {
         subscribeObservers();
         getTopHeadlines();
 
-        testApiCall();
+        //testApiCall();
 
     }
 
     private void subscribeObservers() {
-        mNewsViewModel.getWorldNewsHeadlinesArticle().observe(this, new Observer<List<Article>>() {
+        mNewsViewModel.getWorldNewsHeadlinesArticle().observe(this, new Observer<Resource<List<Article>>>() {
             @Override
-            public void onChanged(List<Article> articles) {
-                if (articles != null) {
-                    for (Article article : articles) {
-                        Log.d(TAG, "onChanged: " + article.getTitle());
-                        mWorldNewsHeadlinesAdapter= new WorldNewsHeadlinesAdapter(articles);
-                        mTopHeadlinesRV.setAdapter(mWorldNewsHeadlinesAdapter);
+            public void onChanged(Resource<List<Article>> listResource) {
+                if (listResource != null) {
+                    Log.d(TAG, "onChanged: status" + listResource.status);
+                    if (listResource.data != null) {
+                        Log.d(TAG, "onChanged: data" + listResource.data);
                     }
-                } else {
-                    Log.d("Main", "onChanged: articles Null" + articles);
-                }
-            }
-        });
-
-        mNewsViewModel.getAllNewsArticle().observe(this, new Observer<List<Article>>() {
-            @Override
-            public void onChanged(List<Article> allarticles) {
-                if (allarticles != null) {
-                    for (Article articles : allarticles) {
-                        Log.d(TAG, "All News: " + articles.getTitle());
-                        mAllNewsAdapter.setArticle(allarticles);
-                    }
-                } else {
-                    Log.d("Main", "onChanged: articles Null" + allarticles);
                 }
             }
         });
@@ -97,8 +81,8 @@ public class WorldFragment extends Fragment implements OnNewsListener {
     }
 
     public void getTopHeadlines() {
-        mNewsViewModel.getNewsHeadlines("bbc-news, cnn,abc-news");
-        mNewsViewModel.getAllNews();
+        mNewsViewModel.getNewsHeadlines();
+        //mNewsViewModel.getAllNews();
 
     }
 
@@ -112,10 +96,10 @@ public class WorldFragment extends Fragment implements OnNewsListener {
         mAllNewsRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
     }
 
-
+    /*
     public void testApiCall() {
         NewsApi newsApi = ServiceGenerator.getNewsApi();
-        Call<NewsResponse> newsResponseCall = newsApi.getWorldNews(API_KEY, "en", "bbc-news, cnn, independent,abc-news");
+        Call<NewsResponse> newsResponseCall = newsApi.getAllHeadlines(API_KEY, "en", "bbc-news, cnn, independent,abc-news");
         newsResponseCall.enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
@@ -133,7 +117,7 @@ public class WorldFragment extends Fragment implements OnNewsListener {
             }
         });
     }
-
+*/
     @Override
     public void onNewsClick(int position) {
         Intent intent = new Intent(getContext(), NewsDetailsActivity.class);

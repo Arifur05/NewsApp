@@ -13,12 +13,16 @@ import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.Expose;
 
+import java.sql.Timestamp;
+
 @Entity(tableName = "news")
 public class Article implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @Expose(serialize = false, deserialize = false)
     public int id;
+    @Embedded(prefix = "source_")
+    private Source source;
     @ColumnInfo(name = "author")
     private String author;
     @ColumnInfo(name = "title")
@@ -27,14 +31,18 @@ public class Article implements Parcelable {
     private String description;
     @ColumnInfo(name = "url")
     private String url;
-    @Embedded(prefix = "source_")
-    private Source source;
     @ColumnInfo(name = "urlToImage")
     private String urlToImage;
     @ColumnInfo(name = "publishedAt")
     private String publishedAt;
     @ColumnInfo(name = "content")
     private String content;
+    @ColumnInfo(name = "category")
+    @Expose(serialize = false, deserialize = false)
+    private String category;
+    @ColumnInfo(name = "save_date")
+    @Expose(serialize = false, deserialize = false)
+    private Timestamp saveDate = new Timestamp(System.currentTimeMillis());
 
     protected Article(Parcel in) {
         id = in.readInt();
@@ -42,9 +50,11 @@ public class Article implements Parcelable {
         title = in.readString();
         description = in.readString();
         url = in.readString();
+        category = in.readString();
         urlToImage = in.readString();
         publishedAt = in.readString();
         content = in.readString();
+        saveDate = (Timestamp) in.readSerializable();
     }
 
     public Article(Source source, String author, String title, String description, String url, String urlToImage, String publishedAt, String content) {
@@ -58,8 +68,10 @@ public class Article implements Parcelable {
         this.content = content;
     }
 
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(author);
         dest.writeString(title);
         dest.writeString(description);
@@ -67,6 +79,8 @@ public class Article implements Parcelable {
         dest.writeString(urlToImage);
         dest.writeString(publishedAt);
         dest.writeString(content);
+        dest.writeString(category);
+        dest.writeSerializable(saveDate);
     }
 
     @Override
@@ -162,5 +176,29 @@ public class Article implements Parcelable {
                 ", publishedAt='" + publishedAt + '\'' +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Timestamp getSaveDate() {
+        return saveDate;
+    }
+
+    public void setSaveDate(Timestamp saveDate) {
+        this.saveDate = saveDate;
     }
 }

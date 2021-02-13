@@ -1,5 +1,7 @@
 package com.arifur.newsapp.requests;
 
+import com.arifur.newsapp.util.LiveDataCallAdapterFactory;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -36,6 +38,7 @@ public class ServiceGenerator {
 
     private static Retrofit.Builder retrofitBuilder= new Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .addCallAdapterFactory(new LiveDataCallAdapterFactory())
             .client(client)
             .addConverterFactory(GsonConverterFactory.create());
     private static Retrofit sRetrofit=retrofitBuilder.build();

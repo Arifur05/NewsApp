@@ -2,6 +2,7 @@ package com.arifur.newsapp.requests;
 
 import androidx.lifecycle.LiveData;
 
+import com.arifur.newsapp.requests.response.ApiResponse;
 import com.arifur.newsapp.requests.response.NewsResponse;
 
 import retrofit2.Call;
@@ -18,21 +19,21 @@ import retrofit2.http.Query;
 public interface NewsApi {
 
     @GET("top-headlines")
-    Call<NewsResponse> getWorldNews(
+    LiveData<ApiResponse<NewsResponse>> getAllHeadlines(
             @Query("apikey") String api,
             @Query("language") String language,
             @Query("sources") String sources
     );
 
     @GET("top-headlines")
-    Call<NewsResponse> getAllNews(
+    LiveData<ApiResponse<NewsResponse>> getAllNews(
             @Query("apikey") String api,
             @Query("language") String language,
             @Query("pageSize") int pageSize
     );
 
     @GET("everything")
-    Call<NewsResponse> getQueryNews(
+    LiveData<ApiResponse<NewsResponse>> getQueryNews(
             @Query("apikey") String api,
             @Query("language") String language,
             @Query("q") String query,

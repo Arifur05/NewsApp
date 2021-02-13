@@ -21,7 +21,7 @@ import com.arifur.newsapp.requests.response.ApiResponse;
  **/
 // ResultType: Type for the Resource database cache.
 // RequestType: Type for the API response(network request).
-abstract class NetworkBoundResource<CacheObject, RequestObject> {
+public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     private static final String TAG = "NetworkBoundResource";
     private AppExecutors mAppExecutors;
     private MediatorLiveData<Resource<CacheObject>> results = new MediatorLiveData<>();

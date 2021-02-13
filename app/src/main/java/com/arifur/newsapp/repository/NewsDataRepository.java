@@ -1,12 +1,26 @@
 package com.arifur.newsapp.repository;
 
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.arifur.newsapp.model.Article;
+import com.arifur.newsapp.persistance.ArticleDao;
+import com.arifur.newsapp.persistance.NewsDatabase;
 import com.arifur.newsapp.requests.NewsApiClient;
+import com.arifur.newsapp.requests.ServiceGenerator;
+import com.arifur.newsapp.requests.response.ApiResponse;
+import com.arifur.newsapp.requests.response.NewsResponse;
+import com.arifur.newsapp.util.AppExecutors;
+import com.arifur.newsapp.util.NetworkBoundResource;
+import com.arifur.newsapp.util.Resource;
 
 import java.util.List;
+
+import static com.arifur.newsapp.util.Constants.API_KEY;
 
 /**
  * @author : Arif
@@ -17,40 +31,48 @@ import java.util.List;
  **/
 public class NewsDataRepository {
     private static NewsDataRepository instance;
-    private static NewsApiClient mApiClient;
-    public static NewsDataRepository getInstance(){
-        if (instance==null){
-            instance= new NewsDataRepository();
+    private ArticleDao mArticleDao;
+
+    //private static NewsApiClient mApiClient;
+    public static NewsDataRepository getInstance(Context context) {
+        if (instance == null) {
+            instance = new NewsDataRepository(context);
         }
         return instance;
     }
 
-    private NewsDataRepository(){
-        mApiClient= NewsApiClient.getInstance();
-
+    public NewsDataRepository(Context context) {
+        mArticleDao = NewsDatabase.getInstance(context).getArticleDao();
     }
 
-    public LiveData<List<Article>> getArticles(){
-        return mApiClient.getArticles();
+    public LiveData<Resource<List<Article>>> getHeadlinesApi() {
+        return new NetworkBoundResource<List<Article>, NewsResponse>(AppExecutors.getInstance()) {
+            @Override
+            protected void saveCallResult(@NonNull NewsResponse item) {
+                if (item.getArticle() != null) {
+                    mArticleDao.insertArticles(item.getArticle());
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<Article> data) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Article>> loadFromDb() {
+                return mArticleDao.getHeadlines("bbc-news, cnn, independent,abc-news");
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<NewsResponse>> createCall() {
+                return ServiceGenerator.getNewsApi()
+                        .getAllHeadlines(API_KEY, "en", "bbc-news, cnn, independent,abc-news");
+            }
+        }.getAsLiveData();
     }
 
-    public LiveData<List<Article>> getAllNews(){
-        return mApiClient.getAllArticles();
-    }
 
-    public LiveData<List<Article>> getQueriedNews(String q){
-        return mApiClient.getQuriedNewsArticle(q);
-    }
-
-    public void getNewsHeadlines(String sources){
-        mApiClient.getWorldNewsApi(sources);
-
-    }
-    public void getAllNewsArticle(){
-        mApiClient.getAllNewsApi();
-    }
-
-    public void getQueriedArticles(String q){
-        mApiClient.getQueriedArticles(q);
-    }
 }
