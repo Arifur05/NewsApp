@@ -39,8 +39,8 @@ public class BusinessFragment extends Fragment {
         mNewsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
 
 
-        subscribeObservers();
-        getQueriedArticles(q);
+        //subscribeObservers();
+        //getQueriedArticles(q);
         //testApiCall();
     }
 
@@ -53,23 +53,11 @@ public class BusinessFragment extends Fragment {
     }
 
     private void subscribeObservers() {
-        mNewsViewModel.getQureiedNewsArticles("business").observe(this, new Observer<List<Article>>() {
-            @Override
-            public void onChanged(List<Article> articles) {
-                if (articles != null) {
-                    for (Article article : articles) {
-                        Log.d(TAG, "onChanged: Business" + article.getTitle());
 
-                    }
-                } else {
-                    Log.d("Main", "onChanged: articles Null" + articles);
-                }
-            }
-        });
     }
 
     public void getQueriedArticles(String q) {
-        mNewsViewModel.getQueriedArticles(q);
+
 
     }
 }

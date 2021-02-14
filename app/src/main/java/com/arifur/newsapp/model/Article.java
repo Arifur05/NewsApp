@@ -15,12 +15,12 @@ import com.google.gson.annotations.Expose;
 
 import java.sql.Timestamp;
 
-@Entity(tableName = "news")
+@Entity(tableName = "articles")
 public class Article implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @Expose(serialize = false, deserialize = false)
-    public int id;
+    private int id;
     @Embedded(prefix = "source_")
     private Source source;
     @ColumnInfo(name = "author")

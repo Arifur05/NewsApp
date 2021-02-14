@@ -28,6 +28,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
     public NetworkBoundResource(AppExecutors appExecutors) {
         mAppExecutors = appExecutors;
+        init();
     }
 
     private void init() {

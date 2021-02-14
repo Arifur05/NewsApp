@@ -1,6 +1,7 @@
 package com.arifur.newsapp.repository;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ import static com.arifur.newsapp.util.Constants.API_KEY;
  * Copyright (C) 2021 - All Rights Reserved
  **/
 public class NewsDataRepository {
+    private static final String TAG = "NewsDataRepository";
     private static NewsDataRepository instance;
     private ArticleDao mArticleDao;
 
@@ -50,7 +52,31 @@ public class NewsDataRepository {
             @Override
             protected void saveCallResult(@NonNull NewsResponse item) {
                 if (item.getArticle() != null) {
-                    mArticleDao.insertArticles(item.getArticle());
+                    Log.d(TAG, "saveCallResult: saved " + item.getArticle().size());
+                    Article[] articles = new Article[item.getArticle().size()];
+                    int index = 0;
+                    for (index = 0; index < item.getArticle().size(); index++) {
+                        item.getArticle().get(index).setCategory("headlines");
+                    }
+                    for (long rowid : mArticleDao.insertArticles((Article[]) (item.getArticle().toArray(articles)))) {
+                        if (rowid == 1) {
+
+                            Log.d(TAG, "saveCallResult: CONFLICT... This article is already in the cache");
+                            mArticleDao.updateNewsTable(
+                                    articles[index].getTitle(),
+                                    articles[index].getAuthor(),
+                                    articles[index].getDescription(),
+                                    articles[index].getUrl(),
+                                    articles[index].getUrlToImage(),
+                                    articles[index].getPublishedAt(),
+                                    articles[index].getContent(),
+                                    articles[index].getCategory(),
+                                    articles[index].getSaveDate()
+                            );
+                        }
+                        index++;
+                    }
+
                 }
             }
 
@@ -62,6 +88,7 @@ public class NewsDataRepository {
             @NonNull
             @Override
             protected LiveData<List<Article>> loadFromDb() {
+                Log.d(TAG, "loadFromDb: fetched");
                 return mArticleDao.getHeadlines("bbc-news, cnn, independent,abc-news");
             }
 

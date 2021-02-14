@@ -1,5 +1,6 @@
 package com.arifur.newsapp.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +25,15 @@ import java.util.List;
  * -------------------------------------------
  * Copyright (C) 2021 - All Rights Reserved
  **/
-public class WorldNewsHeadlinesAdapter extends RecyclerView.Adapter<WorldNewsHeadlinesAdapter.WorldNewsViewHolder>{
+public class WorldNewsHeadlinesAdapter extends RecyclerView.Adapter<WorldNewsHeadlinesAdapter.WorldNewsViewHolder> {
     private static final int TOP_HEADLINES = 1;
     private static final int ALL_NEWS = 2;
+    private Context mContext;
     private List<Article> mArticles;
     private OnNewsListener mOnNewsListener;
 
-    public WorldNewsHeadlinesAdapter(List<Article> articles) {
+    public WorldNewsHeadlinesAdapter(Context context, List<Article> articles) {
+        mContext = context;
         mArticles = articles;
     }
 
@@ -38,7 +41,7 @@ public class WorldNewsHeadlinesAdapter extends RecyclerView.Adapter<WorldNewsHea
     @NonNull
     @Override
     public WorldNewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.headline_card,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.headline_card, parent, false);
 
         return new WorldNewsViewHolder(view, mOnNewsListener);
     }

@@ -14,13 +14,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/world_top_headlines_rv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:listitem="@layout/headline_card"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginRight="6dp"
-            
             android:layout_marginLeft="6dp"
             />
 

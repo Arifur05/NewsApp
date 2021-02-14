@@ -8,6 +8,7 @@ import androidx.room.Query;
 
 import com.arifur.newsapp.model.Article;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -27,16 +28,21 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 public interface ArticleDao {
 
     @Insert(onConflict = IGNORE)
-    long[] insertArticles(List<Article> articles);
+    long[] insertArticles(Article... articles);
 
     @Insert(onConflict = REPLACE)
     void insertArticles(Article article);
 
-    @Query("SELECT * FROM news WHERE source_id= :source ORDER BY publishedAt DESC")
+    @Query("SELECT * FROM articles WHERE source_id= :source ORDER BY publishedAt DESC")
     LiveData<List<Article>> getHeadlines(String source);
 
-    //@Query("UPDATE news SET title= :")
+    @Query("UPDATE articles SET author= :author, description= :description,url= :url, " +
+            "urlToImage= :urlToImage, publishedAt= :publishedAt," +
+            "content= :content, category= :category, save_date= :save_date " +
+            " WHERE title= :title ")
+    void updateNewsTable(String title, String author, String description, String url, String urlToImage, String publishedAt,
+                         String content, String category, Timestamp save_date);
 
-    @Query("SELECT * FROM news WHERE category=:category ORDER BY publishedAt DESC")
+    @Query("SELECT * FROM articles WHERE category=:category ORDER BY publishedAt DESC")
     LiveData<List<Article>> getArticleByCategory(String category);
 }

@@ -21,7 +21,7 @@ import com.arifur.newsapp.model.Article;
 @TypeConverters({Converters.class})
 public abstract class NewsDatabase extends RoomDatabase {
 
-    public static final String DATABASE_NAME = "news_db";
+    public static final String DATABASE_NAME = "articles_db1";
 
     private static NewsDatabase instance;
 
