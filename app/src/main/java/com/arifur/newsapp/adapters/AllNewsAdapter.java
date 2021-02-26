@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.arifur.newsapp.R;
 import com.arifur.newsapp.model.Article;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +28,11 @@ import java.util.List;
 public class AllNewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Article> mArticles;
     private OnNewsListener mOnNewsListener;
+    private RequestManager requestManager;
 
-    public AllNewsAdapter(OnNewsListener onNewsListener) {
+    public AllNewsAdapter(OnNewsListener onNewsListener, RequestManager requestManager) {
         mOnNewsListener = onNewsListener;
-        mArticles= new ArrayList<>();
+        this.requestManager = requestManager;
     }
 
 

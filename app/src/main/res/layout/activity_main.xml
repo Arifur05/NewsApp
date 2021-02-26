@@ -16,19 +16,13 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <ImageButton
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:background="@drawable/ic_twotone_horizontal_split_24"
-                android:padding="4dp" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="2dp"
                 android:text="News"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnSecondary"
                 android:textSize="30sp"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>

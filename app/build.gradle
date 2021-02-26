@@ -29,8 +29,6 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     def retrofitVersion = "2.9.0"

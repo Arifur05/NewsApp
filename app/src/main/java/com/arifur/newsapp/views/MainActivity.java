@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void  initTabs(){
-        mTabAdapter= new TabAdapter(getSupportFragmentManager(),0);
-        mTabAdapter.addFragment(new WorldFragment(),"World");
-        mTabAdapter.addFragment(new BusinessFragment(),"Business");
-        mTabAdapter.addFragment(new TechnologyFragment(),"Technology");
-        mTabAdapter.addFragment(new SportsFragment(),"Sports");
-        mTabAdapter.addFragment(new EntertainmentFragment(),"Entertainment");
+        mTabAdapter = new TabAdapter(getSupportFragmentManager(), 0);
+        mTabAdapter.addFragment(new WorldFragment(), "All News");
+        mTabAdapter.addFragment(new BusinessFragment(), "Business");
+        mTabAdapter.addFragment(new TechnologyFragment(), "Technology");
+        mTabAdapter.addFragment(new SportsFragment(), "Sports");
+        mTabAdapter.addFragment(new EntertainmentFragment(), "Entertainment");
         mViewPager.setAdapter(mTabAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setCurrentItem(mTabAdapter.getItemPosition(0));

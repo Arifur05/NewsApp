@@ -23,6 +23,9 @@ import com.arifur.newsapp.adapters.WorldNewsHeadlinesAdapter;
 import com.arifur.newsapp.model.Article;
 import com.arifur.newsapp.util.Resource;
 import com.arifur.newsapp.viewmodels.NewsViewModel;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -50,14 +53,29 @@ public class WorldFragment extends Fragment implements OnNewsListener {
         mNewsViewModel.getWorldNewsHeadlinesArticle().observe(this, new Observer<Resource<List<Article>>>() {
             @Override
             public void onChanged(Resource<List<Article>> listResource) {
-                if (listResource != null) {
-                    if (listResource.data != null) {
-                        Log.d(TAG, "onChanged: size " + listResource.data.size());
-                        mWorldNewsHeadlinesAdapter = new WorldNewsHeadlinesAdapter(getContext(), listResource.data);
-
-                    }
+                if (listResource.data != null) {
+                    mWorldNewsHeadlinesAdapter = new WorldNewsHeadlinesAdapter(listResource.data, initGlide());
+                    mTopHeadlinesRV.setAdapter(mWorldNewsHeadlinesAdapter);
+                } else {
+                    Log.d(TAG, "onChanged: List is Null\n" + listResource.status);
                 }
             }
+        });
+
+        mNewsViewModel.getAllNewsArticle().observe(this, new Observer<Resource<List<Article>>>() {
+            @Override
+            public void onChanged(Resource<List<Article>> listResource) {
+                if (listResource.status == Resource.Status.SUCCESS) {
+                    if (listResource.data != null) {
+                        mAllNewsAdapter.setArticle(listResource.data);
+                        Log.d(TAG, "onChanged: " + listResource.data.size());
+                    }
+                } else {
+                    Log.d(TAG, "onChanged: All News " + listResource.message);
+                }
+            }
+
+
         });
 
     }
@@ -74,43 +92,18 @@ public class WorldFragment extends Fragment implements OnNewsListener {
 
     public void getTopHeadlines() {
         mNewsViewModel.getNewsHeadlines();
-        //mNewsViewModel.getAllNews();
-
+        mNewsViewModel.getAllNews();
     }
 
 
     public void initRecyclerView() {
+        mTopHeadlinesRV.setAdapter(mWorldNewsHeadlinesAdapter);
+        mAllNewsAdapter = new AllNewsAdapter(this, initGlide());
+        mAllNewsRV.setAdapter(mAllNewsAdapter);
+        mAllNewsRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
-        mTopHeadlinesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        mAllNewsAdapter = new AllNewsAdapter(this);
-        //mTopHeadlinesRV.setAdapter(mWorldNewsHeadlinesAdapter);
-        //mAllNewsRV.setAdapter(mAllNewsAdapter);
-
-        //mAllNewsRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
     }
 
-    /*
-    public void testApiCall() {
-        NewsApi newsApi = ServiceGenerator.getNewsApi();
-        Call<NewsResponse> newsResponseCall = newsApi.getAllHeadlines(API_KEY, "en", "bbc-news, cnn, independent,abc-news");
-        newsResponseCall.enqueue(new Callback<NewsResponse>() {
-            @Override
-            public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                if (response.isSuccessful()) {
-                    NewsResponse responses = response.body();
-                    Log.d(TAG, "onResponse: " + responses.getArticle().get(1).getSource().getId());
-                } else {
-                    Log.d(TAG, "onResponse: " + response.errorBody());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<NewsResponse> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
-    }
-*/
     @Override
     public void onNewsClick(int position) {
         Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
@@ -119,5 +112,13 @@ public class WorldFragment extends Fragment implements OnNewsListener {
         startActivity(intent);
     }
 
+    private RequestManager initGlide() {
 
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.white_background)
+                .error(R.drawable.white_background);
+
+        return Glide.with(this)
+                .setDefaultRequestOptions(options);
+    }
 }

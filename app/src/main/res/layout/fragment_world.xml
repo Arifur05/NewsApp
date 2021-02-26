@@ -8,27 +8,77 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_height="wrap_content"
+                android:text="@string/headlines"
+                android:textSize="24sp"
+                android:padding="6dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="8dp"
+                android:textColor="?attr/colorOnSecondary"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="3.5"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
+                android:background="?attr/colorSecondary" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/world_top_headlines_rv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/headline_card"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginRight="6dp"
-            android:layout_marginLeft="6dp"
-            />
+            android:layout_marginLeft="6dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_weight="3.5"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:background="?attr/colorSecondary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:text="@string/all_news"
+                android:textSize="24sp"
+                android:padding="6dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="8dp"
+                android:textColor="?attr/colorOnSecondary"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/allnews_rv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/all_news_card"
-            android:layout_margin="6dp"
-            />
+            android:layout_margin="6dp" />
     </LinearLayout>
 </FrameLayout>

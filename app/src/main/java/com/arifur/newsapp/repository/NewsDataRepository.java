@@ -52,31 +52,15 @@ public class NewsDataRepository {
             @Override
             protected void saveCallResult(@NonNull NewsResponse item) {
                 if (item.getArticle() != null) {
-                    Log.d(TAG, "saveCallResult: saved " + item.getArticle().size());
-                    Article[] articles = new Article[item.getArticle().size()];
-                    int index = 0;
-                    for (index = 0; index < item.getArticle().size(); index++) {
+                    Log.d(TAG, "saveCallResult: saved " + item.getArticle());
+                    for (int index = 0; index < item.getArticle().size(); index++) {
                         item.getArticle().get(index).setCategory("headlines");
+                        Log.d(TAG, "saveCallResult: saved " + item.getArticle().get(index).getCategory());
                     }
-                    for (long rowid : mArticleDao.insertArticles((Article[]) (item.getArticle().toArray(articles)))) {
-                        if (rowid == 1) {
-
-                            Log.d(TAG, "saveCallResult: CONFLICT... This article is already in the cache");
-                            mArticleDao.updateNewsTable(
-                                    articles[index].getTitle(),
-                                    articles[index].getAuthor(),
-                                    articles[index].getDescription(),
-                                    articles[index].getUrl(),
-                                    articles[index].getUrlToImage(),
-                                    articles[index].getPublishedAt(),
-                                    articles[index].getContent(),
-                                    articles[index].getCategory(),
-                                    articles[index].getSaveDate()
-                            );
-                        }
-                        index++;
-                    }
-
+                    mArticleDao.deleteArticleByCategory("headlines");
+                    mArticleDao.insertArticles(item.getArticle());
+                } else {
+                    Log.d(TAG, "saveCallResult: " + item.getStatus());
                 }
             }
 
@@ -88,8 +72,7 @@ public class NewsDataRepository {
             @NonNull
             @Override
             protected LiveData<List<Article>> loadFromDb() {
-                Log.d(TAG, "loadFromDb: fetched");
-                return mArticleDao.getHeadlines("bbc-news, cnn, independent,abc-news");
+                return mArticleDao.getArticleByCategory("headlines");
             }
 
             @NonNull
@@ -99,7 +82,78 @@ public class NewsDataRepository {
                         .getAllHeadlines(API_KEY, "en", "bbc-news, cnn, independent,abc-news");
             }
         }.getAsLiveData();
+
     }
 
+    public LiveData<Resource<List<Article>>> getAllNewsApi() {
+        return new NetworkBoundResource<List<Article>, NewsResponse>(AppExecutors.getInstance()) {
+            @Override
+            protected void saveCallResult(@NonNull NewsResponse items) {
+                if (items.getArticle() != null) {
+                    Log.d(TAG, "saveCallResult: saved " + items.getArticle());
+                    for (int index = 0; index < items.getArticle().size(); index++) {
+                        items.getArticle().get(index).setCategory("all");
+                        Log.d(TAG, "saveCallResult: saved " + items.getArticle().get(index).getCategory());
+                    }
+                    mArticleDao.deleteArticleByCategory("all");
+                    mArticleDao.insertArticles(items.getArticle());
+                } else {
+                    Log.d(TAG, "saveCallResult: " + items.getStatus());
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<Article> data) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Article>> loadFromDb() {
+                return mArticleDao.getArticleByCategory("all");
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<NewsResponse>> createCall() {
+                return ServiceGenerator.getNewsApi().getAllNews(API_KEY, "en", 100);
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<List<Article>>> getQueriedNewsApi(String query) {
+        return new NetworkBoundResource<List<Article>, NewsResponse>(AppExecutors.getInstance()) {
+            @Override
+            protected void saveCallResult(@NonNull NewsResponse queriedNewsitem) {
+                if (queriedNewsitem.getArticle() != null) {
+                    mArticleDao.deleteArticleByCategory(query);
+                    for (int index = 0; index < queriedNewsitem.getArticle().size(); index++) {
+                        queriedNewsitem.getArticle().get(index).setCategory(query);
+                        Log.d(TAG, "saveCallResult: saved " + queriedNewsitem.getArticle().get(index).getCategory());
+                    }
+                    mArticleDao.insertArticles(queriedNewsitem.getArticle());
+                } else {
+                    Log.d(TAG, "saveCallResult: " + queriedNewsitem.getStatus());
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<Article> data) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Article>> loadFromDb() {
+                return mArticleDao.getArticleByCategory(query);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<NewsResponse>> createCall() {
+                return ServiceGenerator.getNewsApi().getQueryNews(API_KEY, "en", query, 100);
+            }
+        }.getAsLiveData();
+    }
 
 }
